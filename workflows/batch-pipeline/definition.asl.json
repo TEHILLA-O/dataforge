@@ -1,0 +1,57 @@
+{
+  "Comment": "DataForge batch: validate → discover → Glue → quality → catalog or quarantine → publish",
+  "StartAt": "ValidateInput",
+  "States": {
+    "ValidateInput": {
+      "Type": "Pass",
+      "Result": { "dataset": "transactions" },
+      "Next": "DiscoverObjects"
+    },
+    "DiscoverObjects": {
+      "Type": "Pass",
+      "Result": { "objects": ["raw/transactions/"] },
+      "Next": "RunGlue"
+    },
+    "RunGlue": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::glue:startJobRun.sync",
+      "Parameters": {
+        "JobName.$": "$.jobName"
+      },
+      "ResultPath": "$.glue",
+      "Next": "DataQuality",
+      "Catch": [
+        {
+          "ErrorEquals": ["States.ALL"],
+          "ResultPath": "$.error",
+          "Next": "Quarantine"
+        }
+      ]
+    },
+    "DataQuality": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Variable": "$.quality.score",
+          "NumericGreaterThanEquals": 95,
+          "Next": "Catalog"
+        }
+      ],
+      "Default": "Quarantine"
+    },
+    "Catalog": {
+      "Type": "Pass",
+      "Result": { "published": true },
+      "Next": "Publish"
+    },
+    "Quarantine": {
+      "Type": "Pass",
+      "Result": { "published": false, "reason": "quality-fail" },
+      "End": true
+    },
+    "Publish": {
+      "Type": "Pass",
+      "End": true
+    }
+  }
+}

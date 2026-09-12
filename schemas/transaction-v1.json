@@ -1,0 +1,15 @@
+{
+  "id": "transaction-v1",
+  "name": "transaction",
+  "version": 1,
+  "fields": [
+    { "name": "event_id", "type": "string", "required": true },
+    { "name": "customer_id", "type": "string", "required": true },
+    { "name": "event_type", "type": "string", "required": true },
+    { "name": "amount", "type": "decimal", "required": true },
+    { "name": "currency", "type": "string", "required": true },
+    { "name": "country", "type": "string", "required": false },
+    { "name": "device", "type": "string", "required": false },
+    { "name": "timestamp", "type": "timestamp", "required": true }
+  ]
+}

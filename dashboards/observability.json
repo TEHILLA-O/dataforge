@@ -1,0 +1,10 @@
+{
+  "name": "DataForge",
+  "widgets": [
+    { "title": "Events Today", "metric": "IncomingRecords", "stat": "Sum" },
+    { "title": "Current Rate", "metric": "IncomingRecords", "stat": "Average" },
+    { "title": "Pipeline Latency", "metric": "GetRecords.IteratorAgeMilliseconds", "stat": "Maximum" },
+    { "title": "Data Quality", "metric": "QualityScore", "namespace": "DataForge" },
+    { "title": "Quarantined", "metric": "QuarantinedRecords", "namespace": "DataForge" }
+  ]
+}

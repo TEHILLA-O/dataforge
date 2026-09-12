@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>DataForge</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0b1020; --card: #141a2e; --ink: #e8edf7; --muted: #8b95b2; --good: #3dd68c; --warn: #f5c14a; --line: #243049; }
+    body { margin: 0; font-family: ui-sans-serif, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+    header { padding: 28px 32px 8px; letter-spacing: 0.12em; }
+    h1 { margin: 0; font-size: 22px; font-weight: 650; }
+    .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; padding: 16px 32px; }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 16px; }
+    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .value { font-size: 28px; margin-top: 8px; font-variant-numeric: tabular-nums; }
+    table { width: calc(100% - 64px); margin: 8px 32px 32px; border-collapse: collapse; }
+    th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid var(--line); }
+    .ok { color: var(--good); }
+    .deg { color: var(--warn); }
+  </style>
+</head>
+<body>
+  <header><h1>DATAFORGE</h1></header>
+  <section class="grid">
+    <div class="card"><div class="label">Events Today</div><div class="value" id="events">8,291,992</div></div>
+    <div class="card"><div class="label">Current Rate</div><div class="value" id="rate">487/s</div></div>
+    <div class="card"><div class="label">Pipeline Latency</div><div class="value" id="lag">1.2 sec</div></div>
+    <div class="card"><div class="label">Data Quality</div><div class="value" id="quality">99.2%</div></div>
+    <div class="card"><div class="label">Quarantined</div><div class="value" id="q">2,814</div></div>
+  </section>
+  <table>
+    <thead><tr><th>Pipeline</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Transactions</td><td class="ok">HEALTHY</td></tr>
+      <tr><td>Customer Events</td><td class="ok">HEALTHY</td></tr>
+      <tr><td>Logs</td><td class="deg">DEGRADED</td></tr>
+      <tr><td>IoT</td><td class="ok">HEALTHY</td></tr>
+    </tbody>
+  </table>
+  <script>
+    fetch('/api/status').then((r) => r.json()).then((s) => {
+      if (!s.observability) return;
+      document.getElementById('events').textContent = s.observability.eventsToday.toLocaleString('en-GB');
+      document.getElementById('rate').textContent = Math.round(s.observability.currentRate) + '/s';
+      document.getElementById('lag').textContent = s.observability.pipelineLatencySec.toFixed(1) + ' sec';
+      document.getElementById('quality').textContent = s.observability.dataQuality.toFixed(1) + '%';
+      document.getElementById('q').textContent = s.observability.quarantined.toLocaleString('en-GB');
+    }).catch(() => {});
+  </script>
+</body>
+</html>

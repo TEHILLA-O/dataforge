@@ -1,0 +1,22 @@
+{
+  "dashboard": "DataForge Executive",
+  "pages": ["Revenue", "Transactions", "Customers", "Fraud", "Geography", "Pipeline Health"],
+  "metrics": [
+    "Total volume",
+    "Average transaction",
+    "Revenue trend",
+    "Top countries",
+    "Top merchants",
+    "Failure rate",
+    "Fraud alerts",
+    "Data freshness"
+  ],
+  "datasets": [
+    "gold.daily_revenue",
+    "gold.country_performance",
+    "gold.customer_activity",
+    "gold.fraud_summary",
+    "gold.merchant_statistics",
+    "gold.system_performance"
+  ]
+}
