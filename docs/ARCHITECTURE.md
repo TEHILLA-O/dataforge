@@ -88,3 +88,26 @@ Hot customers can skew a shard. That is a talking point, not a surprise: on-dema
 ## Local mode
 
 The same TypeScript engines the Lambdas import also write `.dataforge/lake/`. `dataforge generate` therefore produces raw, bronze, silver, gold, quarantine, quality and lineage without an AWS account. Interviewers can run the CLI in under a minute; deploy is the second conversation.
+
+## Repository layout
+
+```
+infrastructure/   CDK app and stacks (network, storage, streaming, glue, governance, ...)
+services/         event-generator, enrichment, quality-engine, anomaly-detector, schema-registry,
+                  lineage, pii, lake (local medallion writer), backfill
+glue/             streaming and batch job code
+cli/dataforge/    Commander CLI used for generate, quality, lineage, query, deploy, destroy
+schemas/          event and table schemas
+sql/              Athena and Redshift queries
+dashboards/       operational views
+workflows/        Step Functions definitions
+tests/            Jest unit and synth-oriented tests
+docs/             architecture, cost, lake, quality, governance, lineage, schema, security
+```
+
+## Control flow (CLI local path)
+
+1. `dataforge generate` produces simulated financial (or related) events with deliberate defects.
+2. With `--sink local` (default), the TypeScript lake writer under `services/lake` materialises medallion folders under `.dataforge/lake/`.
+3. `dataforge quality` and `dataforge lineage` read that local lake so demos do not require a live AWS bill.
+4. After `cdk deploy`, `--sink kinesis` puts records on the live stream for the enrichment and Glue paths described above.
