@@ -2,6 +2,8 @@
 
 **AWS real-time data lakehouse, streaming analytics and data governance platform.**
 
+See [FAILURES.md](./FAILURES.md) for what can go wrong, what broke, how it was fixed, and results.
+
 Where AegisCloud proves cloud infrastructure, DevOps and security, DataForge proves AWS data engineering: streaming ingestion, a governed S3 medallion lake, schema evolution, quality, lineage and analytics.
 
 The platform ingests simulated financial events, processes them in near real time, stores them in a governed S3 lake, makes them queryable through Athena (and Redshift Serverless in `prod`), and raises anomaly alerts.
